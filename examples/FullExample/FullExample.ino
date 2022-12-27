@@ -4,7 +4,7 @@
    If set to LOG_LEVEL_NONE, no logging will be done.
 */
 #define LOG_LEVEL LOG_LEVEL_NOTICE
-#include <Logging.h>
+#include <EasyLogger.h>
 
 // An array of animals to choose from
 const char *animals[] = {"Horse", "Cow", "Chicken", "Dog", "Snake", "Elephant"};

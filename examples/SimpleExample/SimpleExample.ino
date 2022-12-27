@@ -5,7 +5,7 @@
 */
 // #define LOG_LEVEL LOG_LEVEL_NOTICE
 
-#include <Logging.h>
+#include <EasyLogger.h>
 
 void setup()
 {

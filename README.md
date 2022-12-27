@@ -6,7 +6,7 @@ It's also quite cumbersome to print variables and text together, often this will
 
 First include the library
 ```
-#include <Logging.h>
+#include <EasyLogger.h>
 ```
 Whenever you need to log something do:
 ```
@@ -28,7 +28,7 @@ Just leave all your log-statements in your code. Depending on the loglevel you s
 If for example you put this line before your import statement:
 ```
 #define LOG_LEVEL LOG_LEVEL_NOTICE
-#include <logging.h>
+#include <EasyLogger.h>
 ```
 You will only get log messages with loglevel from LOG_LEVEL_NOTICE and below (eg. WARNING, ERROR, CRITICAL, ALERT and EMERGENCY)
 If you don't set LOG_LEVEL in your sketch everything will be logged from LOG_LEVEL_DEBUG down to LOG_LEVEL_EMERGENCY
