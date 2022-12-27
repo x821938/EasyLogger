@@ -23,7 +23,7 @@ Whenever you sketch reach a LOG_XXX line it will be logged to the serial termina
 000:00:00:00:015  DEBUG     (TEST) : Here is a debug line
 000:00:00:00:016  WARNING   (TEST) : something is wrong! var1=17 and var2=Hello
 ```
-## Filtering
+## Loglevel Filtering
 Just leave all your log-statements in your code. Depending on the loglevel you set in your code the logging will change.
 If for example you put this line before your import statement:
 ```
@@ -45,6 +45,29 @@ These are the loglevels in EasyLogger
 * LOG_LEVEL_DEBUG (7)
 
 If you set LOG_LEVEL to LOG_LEVEL_NONE there will be no logging anymore.
+
+## Service filtering
+Imagine some log lines comming from different services (classes, functions or modules that you name)
+```
+LOG_INFO("svc1", "some info from svc1");
+LOG_INFO("svc2", "some info from svc2");
+LOG_INFO("svc3", "some info from svc3");
+LOG_INFO("svc4", "some info from svc4");
+```
+
+If you only are interested in logging from svc1 and svc2 you could add a filter before including EasyLogger.h:
+```
+#define LOG_FILTER "svc1,svc2"
+#include <EasyLogger.h>
+```
+If you don´t put a filter, then you will get logging for all 3 services.
+
+You could also make an exclusion. If you want logging from all other services than svc1 and scc3 you could do:
+```
+#define LOG_FILTER "svc1,svc3"
+#define LOG_FILTER_EXCLUDE
+#include <EasyLogger.h>
+```
 
 ## Compilation and code optimization
 When you set the LOG_LEVEL for your sketch, only the code that actually logs will be compiled.
