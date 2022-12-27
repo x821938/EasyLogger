@@ -28,9 +28,10 @@
     #define LOG_LEVEL_INFO 6
     #define LOG_LEVEL_DEBUG 7
 
-    // Internal logging function that will be wrapped by definitions like LOG_NOTICE, LOG_ALERT, LOG_CRITICAL etc.
-    // Prints time, loglevel and service code. No endline. That will be streamed by macro-wrapper
     #if LOG_LEVEL > LOG_LEVEL_NONE
+
+        // Internal logging function that will be wrapped by definitions like LOG_NOTICE, LOG_ALERT, LOG_CRITICAL etc.
+        // Prints time, loglevel and service code. No endline. That will be streamed by macro-wrapper
         static void print_log_line_header(uint8_t loglevel, const char *svc)
         {
             static const char *loglevels_text[] = {"EMERGENCY", "ALERT    ", "CRITICAL ", "ERROR    ", "WARNING  ", "NOTIC    ", "INFO     ", "DEBUG    "};
@@ -44,33 +45,93 @@
             Serial << logFormattedTime << "  ";
             Serial << loglevels_text[loglevel] << " (" << svc << ") : ";
         }
+
+        #ifdef LOG_FILTER
+            /* If logfiltering is enabled then this function decides if the service should be logged.
+               It checks service against LOG_FILTER. Depending on LOG_FILTER_EXCLUDE is set, this
+               function returns true or false, showing if it should be logged */
+            static bool should_log_line(const char *svc) 
+            {
+                #ifdef LOG_FILTER_EXCLUDE
+                    static const bool log_filter_exclude = true;
+                #else 
+                    static const bool log_filter_exclude = false;
+                #endif
+
+                bool svc_found_in_filter = (strstr(LOG_FILTER, svc) != NULL);
+                if (svc_found_in_filter && !log_filter_exclude) return (true);
+                if (!svc_found_in_filter && log_filter_exclude) return (true);
+                return (false);
+            }
+        #endif
+
     #endif
 
     // Define logging macro functions per LOG_LEVEL
     #if LOG_LEVEL >= LOG_LEVEL_DEBUG
-        #define LOG_DEBUG(svc, content) { print_log_line_header(LOG_LEVEL_DEBUG, svc); Serial << content; Serial << endl; }
+        #ifdef LOG_FILTER
+            #define LOG_DEBUG(svc, content) { if (should_log_line(svc)) { print_log_line_header(LOG_LEVEL_DEBUG, svc); Serial << content; Serial << endl; } }
+        #else
+            #define LOG_DEBUG(svc, content) { print_log_line_header(LOG_LEVEL_DEBUG, svc); Serial << content; Serial << endl; }
+        #endif
     #endif
+    
     #if LOG_LEVEL >= LOG_LEVEL_INFO
-        #define LOG_INFO(svc, content) { print_log_line_header(LOG_LEVEL_INFO, svc); Serial << content; Serial << endl; }
+        #ifdef LOG_FILTER
+            #define LOG_INFO(svc, content) { if (should_log_line(svc)) { print_log_line_header(LOG_LEVEL_INFO, svc); Serial << content; Serial << endl; } }
+        #else
+            #define LOG_INFO(svc, content) { print_log_line_header(LOG_LEVEL_INFO, svc); Serial << content; Serial << endl; }
+        #endif
     #endif
+
     #if LOG_LEVEL >= LOG_LEVEL_NOTICE
-        #define LOG_NOTICE(svc, content) { print_log_line_header(LOG_LEVEL_NOTICE, svc); Serial << content; Serial << endl; }
+        #ifdef LOG_FILTER
+            #define LOG_NOTICE(svc, content) if (should_log_line(svc)) { { print_log_line_header(LOG_LEVEL_NOTICE, svc); Serial << content; Serial << endl; } }
+        #else
+            #define LOG_NOTICE(svc, content) { print_log_line_header(LOG_LEVEL_NOTICE, svc); Serial << content; Serial << endl; }
+        #endif
     #endif
+
     #if LOG_LEVEL >= LOG_LEVEL_WARNING
-        #define LOG_WARNING(svc, content) { print_log_line_header(LOG_LEVEL_WARNING, svc); Serial << content; Serial << endl; }
+        #ifdef LOG_FILTER
+            #define LOG_WARNING(svc, content) if (should_log_line(svc)) { { print_log_line_header(LOG_LEVEL_WARNING, svc); Serial << content; Serial << endl; } }
+        #else
+            #define LOG_WARNING(svc, content) { print_log_line_header(LOG_LEVEL_WARNING, svc); Serial << content; Serial << endl; }
+        #endif
     #endif
+
     #if LOG_LEVEL >= LOG_LEVEL_ERROR
-        #define LOG_ERROR(svc, content) { print_log_line_header(LOG_LEVEL_ERROR, svc); Serial << content; Serial << endl; }
+        #ifdef LOG_FILTER
+            #define LOG_ERROR(svc, content) { if (should_log_line(svc)) { print_log_line_header(LOG_LEVEL_ERROR, svc); Serial << content; Serial << endl; } }
+        #else
+            #define LOG_ERROR(svc, content) { print_log_line_header(LOG_LEVEL_ERROR, svc); Serial << content; Serial << endl; }
+        #endif
     #endif
+
     #if LOG_LEVEL >= LOG_LEVEL_CRITICAL
-        #define LOG_CRITICAL(svc, content) { print_log_line_header(LOG_LEVEL_CRITICAL, svc); Serial << content; Serial << endl; }
+        #ifdef LOG_FILTER
+            #define LOG_CRITICAL(svc, content) { if (should_log_line(svc)) { print_log_line_header(LOG_LEVEL_CRITICAL, svc); Serial << content; Serial << endl; } }
+        #else
+            #define LOG_CRITICAL(svc, content) { print_log_line_header(LOG_LEVEL_CRITICAL, svc); Serial << content; Serial << endl; }
+        #endif
     #endif
+
     #if LOG_LEVEL >= LOG_LEVEL_ALERT
-        #define LOG_ALERT(svc, content) { print_log_line_header(LOG_LEVEL_ALERT, svc); Serial << content; Serial << endl; }
+        #ifdef LOG_FILTER
+            #define LOG_ALERT(svc, content) { if (should_log_line(svc)) { print_log_line_header(LOG_LEVEL_ALERT, svc); Serial << content; Serial << endl; } }
+        #else
+            #define LOG_ALERT(svc, content) { print_log_line_header(LOG_LEVEL_ALERT, svc); Serial << content; Serial << endl; }
+        #endif
     #endif
+
     #if LOG_LEVEL >= LOG_LEVEL_EMERGENCY
-        #define LOG_EMERGENCY(svc, content) { print_log_line_header(LOG_LEVEL_EMERGENCY, svc); Serial << content; Serial << endl; }
+        #ifdef LOG_FILTER
+            #define LOG_EMERGENCY(svc, content) { if (should_log_line(svc)) { print_log_line_header(LOG_LEVEL_EMERGENCY, svc); Serial << content; Serial << endl; } }
+        #else
+            #define LOG_EMERGENCY(svc, content) { print_log_line_header(LOG_LEVEL_EMERGENCY, svc); Serial << content; Serial << endl; }
+        #endif
     #endif
+
 
     // If logging functions has not been defined before, because of too low LOG_LEVEL, then we define them as nothing here
     #ifndef LOG_DEBUG

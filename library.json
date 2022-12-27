@@ -1,0 +1,21 @@
+{
+    "name": "EasyLogger",
+    "version": "1.0.2",
+    "description": "A library to do serial logging the easy and lightweight way",
+    "keywords": "log, logging, logger,loglevel, serial, easylogger",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/x821938/EasyLogger.git"
+    },
+    "authors": [
+        {
+            "name": "Alex Skov Jensen",
+            "email": "ard-contact@offline.dk",
+            "url": "https://github.com/x821938/EasyLogger"
+        }
+    ],
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/x821938/EasyLogger",
+    "frameworks": "*",
+    "platforms": "*"
+}
