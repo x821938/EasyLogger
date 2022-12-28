@@ -2,9 +2,8 @@
 #define _LOGGING_h
     #include <Arduino.h>
 
-    // Default loglevel to DEBUG, unless user defines something else before including logging.h.
     #ifndef LOG_LEVEL
-    #define LOG_LEVEL LOG_LEVEL_DEBUG
+        #warning You have not defined a LOG_LEVEL before including EasyLogger. Nothing will be logged!
     #endif
 
     // Streaming operator for serial print use to make nice logging like

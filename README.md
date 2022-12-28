@@ -4,8 +4,9 @@ It's also quite cumbersome to print variables and text together, often this will
 
 ## A better and much easier way is with EasyLogger
 
-First include the library
+First define a loglevel and then include the library
 ```
+#define LOG_LEVEL LOG_LEVEL_DEBUG    // Set loglevel before including
 #include <EasyLogger.h>
 ```
 Whenever you need to log something do:
@@ -30,11 +31,12 @@ If for example you put this line before your import statement:
 #define LOG_LEVEL LOG_LEVEL_NOTICE
 #include <EasyLogger.h>
 ```
-You will only get log messages with loglevel from LOG_LEVEL_NOTICE and below (eg. WARNING, ERROR, CRITICAL, ALERT and EMERGENCY)
-If you don't set LOG_LEVEL in your sketch everything will be logged from LOG_LEVEL_DEBUG down to LOG_LEVEL_EMERGENCY
+You will only get log messages with loglevel from LOG_LEVEL_NOTICE and below (eg. NOTICE, WARNING, ERROR, CRITICAL, ALERT and EMERGENCY)
 
-## Loglevels:
-These are the loglevels in EasyLogger
+If you don't set LOG_LEVEL in your sketch nothing will be logged.
+
+### Loglevels:
+There are 8 loglevels in EasyLogger
 * LOG_LEVEL_EMERGENCY (0)
 * LOG_LEVEL_ALERT (1)
 * LOG_LEVEL_CRITICAL (2)
@@ -45,6 +47,7 @@ These are the loglevels in EasyLogger
 * LOG_LEVEL_DEBUG (7)
 
 If you set LOG_LEVEL to LOG_LEVEL_NONE there will be no logging anymore.
+
 
 ## Service filtering
 Imagine some log lines comming from different services (classes, functions or modules that you name)
@@ -60,7 +63,7 @@ If you only are interested in logging from svc1 and svc2 you could add a filter 
 #define LOG_FILTER "svc1,svc2"
 #include <EasyLogger.h>
 ```
-If you don´t put a filter, then you will get logging for all 3 services.
+If you don´t put a filter, then you will get logging for all 4 services.
 
 You could also make an exclusion. If you want logging from all other services than svc1 and scc3 you could do:
 ```
