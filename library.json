@@ -1,8 +1,8 @@
 {
     "name": "EasyLogger",
-    "version": "1.0.3",
-    "description": "A library to do serial logging the easy and lightweight way",
-    "keywords": "log, logging, logger,loglevel, serial, easylogger",
+    "version": "1.0.4",
+    "description": "A library to do serial logging the easy and lightweight way. Log easily in your sketch at different loglevels. The output is presented nicely with a timestamp down to the milliseconds. Even if your are worried about sketch size, you can still Leave logging statements in your sketch. When you change loglevels your log-statements will be compiled out.",
+    "keywords": "log, logging, logger,loglevel, debug, serial, easylogger, AVR, ESP32, ESP8266",
     "repository": {
         "type": "git",
         "url": "https://github.com/x821938/EasyLogger.git"
