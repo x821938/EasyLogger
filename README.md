@@ -21,8 +21,8 @@ LOG_WARNING("TEST", "something is wrong! var1=" << var1 << " and var2=" << var2)
 ```
 Whenever you sketch reach a LOG_XXX line it will be logged to the serial terminal with timestamps like this:
 ```
-000:00:00:00:015  DEBUG     (TEST) : Here is a debug line
-000:00:00:00:016  WARNING   (TEST) : something is wrong! var1=17 and var2=Hello
+000:00:00:00:015  DEBUG     [TEST] : Here is a debug line
+000:00:00:00:016  WARNING   [TEST] : something is wrong! var1=17 and var2=Hello
 ```
 ## Loglevel Filtering
 Just leave all your log-statements in your code. Depending on the loglevel you set in your code the logging will change.
@@ -88,5 +88,19 @@ LOG_NOTICE(char* service, stream logline);
 LOG_INFO(char* service, stream logline);
 LOG_DEBUG(char* service, stream logline);
 ```
+## Time formatting
+You can change the formatting of the timestamps of the log-output:
+```
+#define LOG_FORMATTING LOG_FORMATTING_MILLIS
+```
+LOG_FORMATTING can be set to LOG_FORMATTING_HMS, LOG_FORMATTING_MILLIS or LOG_FORMATTING_NOTIME.
+The 3 results will be like this:
+```
+000:00:00:00:014  EMERGENCY [setup] : Just a fake emergency
+000000014  EMERGENCY [setup] : Just a fake emergency
+EMERGENCY [setup] : Just a fake emergency
+```
+If you dont define LOG_FORMATTING it will default to LOG_FORMATTING_HMS
+
 ## Examples
 See the included examples in /examples folder for usage.

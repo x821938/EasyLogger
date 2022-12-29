@@ -12,6 +12,10 @@
    listed in LOG_FILTER. Effectively it reverses the filter */
 #define LOG_FILTER_EXCLUDE
 
+/* LOG_FORMATTING can be set to LOG_FORMATTING_HMS, LOG_FORMATTING_MILLIS or LOG_FORMATTING_NOTIME
+   If not defined, the standard will be LOG_FORMAT_HMS */
+// #define LOG_FORMATTING LOG_FORMATTING_MILLIS
+
 /* -------------------------------------------------------------------*/
 
 #include <EasyLogger.h>

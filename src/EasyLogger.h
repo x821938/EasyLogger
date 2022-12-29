@@ -1,5 +1,5 @@
-#ifndef _LOGGING_h
-#define _LOGGING_h
+#ifndef _EASYLOGGGER_h
+#define _EASYLOGGGER_h
     #include <Arduino.h>
 
     #ifndef LOG_LEVEL
@@ -27,6 +27,15 @@
     #define LOG_LEVEL_INFO 6
     #define LOG_LEVEL_DEBUG 7
 
+    // Log formats
+    #define LOG_FORMATTING_MILLIS 0
+    #define LOG_FORMATTING_HMS 1
+    #define LOG_FORMATTING_NOTIME 2
+
+    #ifndef LOG_FORMATTING
+        #define LOG_FORMATTING LOG_FORMATTING_HMS
+    #endif
+
     #if LOG_LEVEL > LOG_LEVEL_NONE
 
         // Internal logging function that will be wrapped by definitions like LOG_NOTICE, LOG_ALERT, LOG_CRITICAL etc.
@@ -35,14 +44,22 @@
         {
             static const char *loglevels_text[] = {"EMERGENCY", "ALERT    ", "CRITICAL ", "ERROR    ", "WARNING  ", "NOTIC    ", "INFO     ", "DEBUG    "};
             long logTime = millis();
-            long seconds = logTime / 1000;
-            long minutes = seconds / 60;
-            long hours = minutes / 60;
-            long days = hours / 24;
-            char logFormattedTime[17];
-            sprintf(logFormattedTime, "%03u:%02u:%02u:%02u:%03u", days, hours % 24, minutes % 60, seconds % 60, logTime % 1000);
-            Serial << logFormattedTime << "  ";
-            Serial << loglevels_text[loglevel] << " (" << svc << ") : ";
+            char logFormattedTime[18];
+
+            #if LOG_FORMATTING == LOG_FORMATTING_HMS
+                long seconds = logTime / 1000;
+                long minutes = seconds / 60;
+                long hours = minutes / 60;
+                long days = hours / 24;
+                sprintf(logFormattedTime, "%03u:%02u:%02u:%02u:%03u", days, hours % 24, minutes % 60, seconds % 60, logTime % 1000);
+                Serial << logFormattedTime << "  ";
+            #elif LOG_FORMATTING == LOG_FORMATTING_MILLIS
+                sprintf(logFormattedTime, "%09u", logTime);
+                Serial << logFormattedTime << "  ";
+            #elif LOG_FORMATTING == LOG_FORMATTING_NOTIME
+                // Dont print anything
+            #endif
+            Serial << loglevels_text[loglevel] << " [" << svc << "] : ";
         }
 
         #ifdef LOG_FILTER
@@ -73,6 +90,8 @@
         #else
             #define LOG_DEBUG(svc, content) { print_log_line_header(LOG_LEVEL_DEBUG, svc); Serial << content; Serial << endl; }
         #endif
+    #else
+        #define LOG_DEBUG(svc, content)
     #endif
     
     #if LOG_LEVEL >= LOG_LEVEL_INFO
@@ -81,6 +100,8 @@
         #else
             #define LOG_INFO(svc, content) { print_log_line_header(LOG_LEVEL_INFO, svc); Serial << content; Serial << endl; }
         #endif
+    #else
+        #define LOG_INFO(svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_NOTICE
@@ -89,6 +110,8 @@
         #else
             #define LOG_NOTICE(svc, content) { print_log_line_header(LOG_LEVEL_NOTICE, svc); Serial << content; Serial << endl; }
         #endif
+    #else
+        #define LOG_NOTICE(svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_WARNING
@@ -97,6 +120,8 @@
         #else
             #define LOG_WARNING(svc, content) { print_log_line_header(LOG_LEVEL_WARNING, svc); Serial << content; Serial << endl; }
         #endif
+    #else
+        #define LOG_WARNING(svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_ERROR
@@ -105,6 +130,8 @@
         #else
             #define LOG_ERROR(svc, content) { print_log_line_header(LOG_LEVEL_ERROR, svc); Serial << content; Serial << endl; }
         #endif
+    #else
+        #define LOG_ERROR(svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_CRITICAL
@@ -113,6 +140,8 @@
         #else
             #define LOG_CRITICAL(svc, content) { print_log_line_header(LOG_LEVEL_CRITICAL, svc); Serial << content; Serial << endl; }
         #endif
+    #else
+        #define LOG_CRITICAL(svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_ALERT
@@ -121,6 +150,8 @@
         #else
             #define LOG_ALERT(svc, content) { print_log_line_header(LOG_LEVEL_ALERT, svc); Serial << content; Serial << endl; }
         #endif
+    #else
+        #define LOG_ALERT(svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_EMERGENCY
@@ -129,33 +160,8 @@
         #else
             #define LOG_EMERGENCY(svc, content) { print_log_line_header(LOG_LEVEL_EMERGENCY, svc); Serial << content; Serial << endl; }
         #endif
-    #endif
-
-
-    // If logging functions has not been defined before, because of too low LOG_LEVEL, then we define them as nothing here
-    #ifndef LOG_DEBUG
-        #define LOG_DEBUG(svc, content)
-    #endif
-    #ifndef LOG_INFO
-        #define LOG_INFO(svc, content)
-    #endif
-    #ifndef LOG_NOTICE
-        #define LOG_NOTICE(svc, content)
-    #endif
-    #ifndef LOG_WARNING
-        #define LOG_WARNING(svc, content)
-    #endif
-    #ifndef LOG_ERROR
-        #define LOG_ERROR(svc, content)
-    #endif
-    #ifndef LOG_CRITICAL
-        #define LOG_CRITICAL(svc, content)
-    #endif
-    #ifndef LOG_ALERT
-        #define LOG_ALERT(svc, content)
-    #endif
-    #ifndef LOG_EMERGENCY
+    #else
         #define LOG_EMERGENCY(svc, content)
     #endif
 
-#endif // ifndef _LOGGING_h
+#endif // ifndef _EASYLOGGGER
