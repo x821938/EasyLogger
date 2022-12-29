@@ -45,14 +45,14 @@
         static void print_log_line_header(uint8_t loglevel, const char *svc)
         {
             static const char *loglevels_text[] = {"EMERGENCY", "ALERT    ", "CRITICAL ", "ERROR    ", "WARNING  ", "NOTIC    ", "INFO     ", "DEBUG    "};
-            static long logTime = millis();
+            long logTime = millis();
             static char logFormattedTime[18];
 
             #if LOG_FORMATTING == LOG_FORMATTING_HMS
-                static long seconds = logTime / 1000;
-                static long minutes = seconds / 60;
-                static long hours = minutes / 60;
-                static long days = hours / 24;
+                long seconds = logTime / 1000;
+                long minutes = seconds / 60;
+                long hours = minutes / 60;
+                long days = hours / 24;
                 sprintf(logFormattedTime, "%03u:%02u:%02u:%02u:%03u", days, hours % 24, minutes % 60, seconds % 60, logTime % 1000);
                 Serial << logFormattedTime << "  ";
             #elif LOG_FORMATTING == LOG_FORMATTING_MILLIS
