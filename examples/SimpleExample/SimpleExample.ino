@@ -3,7 +3,7 @@
    in order to filter out the lowest level information.
    If set to LOG_LEVEL_NONE, no logging will be done.
 */
-// #define LOG_LEVEL LOG_LEVEL_NOTICE
+#define LOG_LEVEL LOG_LEVEL_DEBUG
 
 #include <EasyLogger.h>
 
