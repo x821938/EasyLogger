@@ -1,10 +1,3 @@
-/* This LOG_LEVEL can be set to LOG_LEVEL_EMERGENCY, LOG_LEVEL_ALERT, LOG_LEVEL_CRITICAL
-   LOG_LEVEL_ERROR, LOG_LEVEL_WARNING, LOG_LEVEL_NOTICE, LOG_LEVEL_INFO, LOG_LEVEL_DEBUG
-   in order to filter out the lowest level information.
-   If set to LOG_LEVEL_NONE, no logging will be done.
-*/
-#define LOG_LEVEL LOG_LEVEL_DEBUG
-
 #include <EasyLogger.h>
 
 void setup()

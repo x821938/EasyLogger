@@ -2,10 +2,6 @@
 #define _EASYLOGGGER_h
     #include <Arduino.h>
 
-    #ifndef LOG_LEVEL
-        #warning You have not defined a LOG_LEVEL before including EasyLogger. Nothing will be logged!
-    #endif
-
     // Streaming operator for serial print use to make nice logging like
     // LOG_DEBUG("TST", "var1" << var1 << ", var2=" << var2)
     template <class T>
@@ -27,11 +23,17 @@
     #define LOG_LEVEL_INFO 6
     #define LOG_LEVEL_DEBUG 7
 
+    // Default LOG_LEVEL is
+    #ifndef LOG_LEVEL
+        #define LOG_LEVEL LOG_LEVEL_DEBUG
+    #endif
+
     // Log formats
     #define LOG_FORMATTING_MILLIS 0
     #define LOG_FORMATTING_HMS 1
     #define LOG_FORMATTING_NOTIME 2
 
+    // Default log formatting is LOG_FORMATTING_HMS
     #ifndef LOG_FORMATTING
         #define LOG_FORMATTING LOG_FORMATTING_HMS
     #endif
@@ -43,14 +45,14 @@
         static void print_log_line_header(uint8_t loglevel, const char *svc)
         {
             static const char *loglevels_text[] = {"EMERGENCY", "ALERT    ", "CRITICAL ", "ERROR    ", "WARNING  ", "NOTIC    ", "INFO     ", "DEBUG    "};
-            long logTime = millis();
-            char logFormattedTime[18];
+            static long logTime = millis();
+            static char logFormattedTime[18];
 
             #if LOG_FORMATTING == LOG_FORMATTING_HMS
-                long seconds = logTime / 1000;
-                long minutes = seconds / 60;
-                long hours = minutes / 60;
-                long days = hours / 24;
+                static long seconds = logTime / 1000;
+                static long minutes = seconds / 60;
+                static long hours = minutes / 60;
+                static long days = hours / 24;
                 sprintf(logFormattedTime, "%03u:%02u:%02u:%02u:%03u", days, hours % 24, minutes % 60, seconds % 60, logTime % 1000);
                 Serial << logFormattedTime << "  ";
             #elif LOG_FORMATTING == LOG_FORMATTING_MILLIS

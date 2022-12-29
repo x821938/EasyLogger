@@ -1,7 +1,7 @@
 #include "log.h" // Global log settings for all sketch in one file
 
-#include "file1.h"
-#include "file2.h"
+#include "MultiFunction_file1.h"
+#include "MultiFunction_file2.h"
 
 void setup()
 {

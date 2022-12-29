@@ -4,9 +4,8 @@ It's also quite cumbersome to print variables and text together, often this will
 
 ## A better and much easier way is with EasyLogger
 
-First define a loglevel and then include the library
+First include the library
 ```
-#define LOG_LEVEL LOG_LEVEL_DEBUG    // Set loglevel before including
 #include <EasyLogger.h>
 ```
 Whenever you need to log something do:
@@ -24,6 +23,8 @@ Whenever you sketch reach a LOG_XXX line it will be logged to the serial termina
 000:00:00:00:015  DEBUG     [TEST] : Here is a debug line
 000:00:00:00:016  WARNING   [TEST] : something is wrong! var1=17 and var2=Hello
 ```
+
+
 ## Loglevel Filtering
 Just leave all your log-statements in your code. Depending on the loglevel you set in your code the logging will change.
 If for example you put this line before your import statement:
@@ -33,10 +34,10 @@ If for example you put this line before your import statement:
 ```
 You will only get log messages with loglevel from LOG_LEVEL_NOTICE and below (eg. NOTICE, WARNING, ERROR, CRITICAL, ALERT and EMERGENCY)
 
-If you don't set LOG_LEVEL in your sketch nothing will be logged.
+If you don't set LOG_LEVEL in your sketch loglevel LOG_LEVEL_DEBUG will be set, meaning everything will be logged.
 
-### Loglevels:
-There are 8 loglevels in EasyLogger
+### Loglevels in EasyLogger:
+There are 8 loglevels:
 * LOG_LEVEL_EMERGENCY (0)
 * LOG_LEVEL_ALERT (1)
 * LOG_LEVEL_CRITICAL (2)
@@ -47,6 +48,7 @@ There are 8 loglevels in EasyLogger
 * LOG_LEVEL_DEBUG (7)
 
 If you set LOG_LEVEL to LOG_LEVEL_NONE there will be no logging anymore.
+
 
 
 ## Service filtering
@@ -100,7 +102,7 @@ The 3 results will be like this:
 000000014  EMERGENCY [setup] : Just a fake emergency
 EMERGENCY [setup] : Just a fake emergency
 ```
-If you dont define LOG_FORMATTING it will default to LOG_FORMATTING_HMS
+If you dont define LOG_FORMATTING it will default to LOG_FORMATTING_HMS (The first line above)
 
 ## Examples
 See the included examples in /examples folder for usage.
