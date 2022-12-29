@@ -44,15 +44,19 @@
         // Prints time, loglevel and service code. No endline. That will be streamed by macro-wrapper
         static void print_log_line_header(uint8_t loglevel, const char *svc)
         {
+            // Keep things static to avoid memory fragmentation
             static const char *loglevels_text[] = {"EMERGENCY", "ALERT    ", "CRITICAL ", "ERROR    ", "WARNING  ", "NOTIC    ", "INFO     ", "DEBUG    "};
-            long logTime = millis();
+            static long logTime;
             static char logFormattedTime[18];
 
+            logTime = millis();
+
             #if LOG_FORMATTING == LOG_FORMATTING_HMS
-                long seconds = logTime / 1000;
-                long minutes = seconds / 60;
-                long hours = minutes / 60;
-                long days = hours / 24;
+                static long seconds, minutes, hours, days;
+                seconds = logTime / 1000;
+                minutes = seconds / 60;
+                hours = minutes / 60;
+                days = hours / 24;
                 sprintf(logFormattedTime, "%03u:%02u:%02u:%02u:%03u", days, hours % 24, minutes % 60, seconds % 60, logTime % 1000);
                 Serial << logFormattedTime << "  ";
             #elif LOG_FORMATTING == LOG_FORMATTING_MILLIS
