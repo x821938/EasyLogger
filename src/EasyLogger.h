@@ -94,11 +94,11 @@
        inserted at each log-statement. First it's checked if line should be logged according
        to the filter. Then it logs if if it's in the filter
        It will log time-stamp and log-content with an endline */
-    #define LOG_RAW_FILTER_LINE(svc, content)               \
+    #define LOG_RAW_FILTER_LINE(loglevel, svc, content)     \
     {                                                       \
         if (should_log_line(svc))                           \
         {                                                   \
-            print_log_line_header(LOG_LEVEL_DEBUG, svc);    \
+            print_log_line_header(loglevel, svc);           \
             Serial << content;                              \
             Serial << endl;                                 \
         }                                                   \
@@ -106,97 +106,97 @@
 
     /* Reusable code for each loglevel macro funcion. This code is inserted in the log-statement
        if filtering is disabled. Just prints a time-stamp and the log content with an endline */
-    #define LOG_RAW_LINE(svc,content)                       \
+    #define LOG_RAW_LINE(loglevel, svc, content)            \
     {                                                       \
-        print_log_line_header(LOG_LEVEL_DEBUG, svc);        \
+        print_log_line_header(loglevel, svc);               \
         Serial << content;                                  \
         Serial << endl;                                     \
     }
 
     /* If the log statement function shouldn't be compiled in, because our loglevel is too low .
        Then no code should be compiled */
-    #define LOG_RAW_DO_NOTHING(svc, content)
+    #define LOG_RAW_DO_NOTHING(loglevel, svc, content)
 
     // Define logging macro functions per LOG_LEVEL
 
     #if LOG_LEVEL >= LOG_LEVEL_DEBUG
         #ifdef LOG_FILTER
-            #define LOG_DEBUG(svc, content) LOG_RAW_FILTER_LINE(svc, content)
+            #define LOG_DEBUG(svc, content) LOG_RAW_FILTER_LINE(LOG_LEVEL_DEBUG, svc, content)
         #else
-            #define LOG_DEBUG(svc, content) LOG_RAW_LINE(svc, content)
+            #define LOG_DEBUG(svc, content) LOG_RAW_LINE(LOG_LEVEL_DEBUG, svc, content)
         #endif
     #else
-        #define LOG_DEBUG(svc, content) LOG_RAW_DO_NOTHING(svc, content)
+        #define LOG_DEBUG(svc, content) LOG_RAW_DO_NOTHING(LOG_LEVEL_DEBUG, svc, content)
     #endif
     
     #if LOG_LEVEL >= LOG_LEVEL_INFO
         #ifdef LOG_FILTER
-            #define LOG_INFO(svc, content) LOG_RAW_FILTER_LINE(svc, content)
+            #define LOG_INFO(svc, content) LOG_RAW_FILTER_LINE(LOG_LEVEL_INFO, svc, content)
         #else
-            #define LOG_INFO(svc, content) LOG_RAW_LINE(svc, content)
+            #define LOG_INFO(svc, content) LOG_RAW_LINE(LOG_LEVEL_INFO, svc, content)
         #endif
     #else
-        #define LOG_INFO(svc, content) LOG_RAW_DO_NOTHING(svc, content)
+        #define LOG_INFO(svc, content) LOG_RAW_DO_NOTHING(LOG_LEVEL_INFO, svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_NOTICE
         #ifdef LOG_FILTER
-            #define LOG_NOTICE(svc, content) LOG_RAW_FILTER_LINE(svc, content)
+            #define LOG_NOTICE(svc, content) LOG_RAW_FILTER_LINE(LOG_LEVEL_NOTICE, svc, content)
         #else
-            #define LOG_NOTICE(svc, content) LOG_RAW_LINE(svc, content)
+            #define LOG_NOTICE(svc, content) LOG_RAW_LINE(LOG_LEVEL_NOTICE, svc, content)
         #endif
     #else
-        #define LOG_NOTICE(svc, content) LOG_RAW_DO_NOTHING(svc, content)
+        #define LOG_NOTICE(svc, content) LOG_RAW_DO_NOTHING(LOG_LEVEL_NOTICE, svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_WARNING
         #ifdef LOG_FILTER
-            #define LOG_WARNING(svc, content) LOG_RAW_FILTER_LINE(svc, content)
+            #define LOG_WARNING(svc, content) LOG_RAW_FILTER_LINE(LOG_LEVEL_WARNING, svc, content)
         #else
-            #define LOG_WARNING(svc, content) LOG_RAW_LINE(svc, content)
+            #define LOG_WARNING(svc, content) LOG_RAW_LINE(LOG_LEVEL_WARNING, svc, content)
         #endif
     #else
-        #define LOG_WARNING(svc, content) LOG_RAW_DO_NOTHING(svc, content)
+        #define LOG_WARNING(svc, content) LOG_RAW_DO_NOTHING(LOG_LEVEL_WARNING, svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_ERROR
         #ifdef LOG_FILTER
-            #define LOG_ERROR(svc, content) LOG_RAW_FILTER_LINE(svc, content)
+            #define LOG_ERROR(svc, content) LOG_RAW_FILTER_LINE(LOG_LEVEL_ERROR, svc, content)
         #else
-            #define LOG_ERROR(svc, content) LOG_RAW_LINE(svc, content)
+            #define LOG_ERROR(svc, content) LOG_RAW_LINE(LOG_LEVEL_ERROR, svc, content)
         #endif
     #else
-        #define LOG_ERROR(svc, content) LOG_RAW_DO_NOTHING(svc, content)
+        #define LOG_ERROR(svc, content) LOG_RAW_DO_NOTHING(LOG_LEVEL_ERROR, svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_CRITICAL
         #ifdef LOG_FILTER
-            #define LOG_CRITICAL(svc, content) LOG_RAW_FILTER_LINE(svc, content)
+            #define LOG_CRITICAL(svc, content) LOG_RAW_FILTER_LINE(LOG_LEVEL_CRITICAL, svc, content)
         #else
-            #define LOG_CRITICAL(svc, content) LOG_RAW_LINE(svc, content)
+            #define LOG_CRITICAL(svc, content) LOG_RAW_LINE(LOG_LEVEL_CRITICAL, svc, content)
         #endif
     #else
-        #define LOG_CRITICAL(svc, content) LOG_RAW_DO_NOTHING(svc, content)
+        #define LOG_CRITICAL(svc, content) LOG_RAW_DO_NOTHING(LOG_LEVEL_CRITICAL, svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_ALERT
         #ifdef LOG_FILTER
-            #define LOG_ALERT(svc, content) LOG_RAW_FILTER_LINE(svc, content)
+            #define LOG_ALERT(svc, content) LOG_RAW_FILTER_LINE(LOG_LEVEL_ALERT, svc, content)
         #else
-            #define LOG_ALERT(svc, content) LOG_RAW_LINE(svc, content)
+            #define LOG_ALERT(svc, content) LOG_RAW_LINE(LOG_LEVEL_ALERT, svc, content)
         #endif
     #else
-        #define LOG_ALERT(svc, content) LOG_RAW_DO_NOTHING(svc, content)
+        #define LOG_ALERT(svc, content) LOG_RAW_DO_NOTHING(LOG_LEVEL_ALERT, svc, content)
     #endif
 
     #if LOG_LEVEL >= LOG_LEVEL_EMERGENCY
         #ifdef LOG_FILTER
-            #define LOG_EMERGENCY(svc, content) LOG_RAW_FILTER_LINE(svc, content)
+            #define LOG_EMERGENCY(svc, content) LOG_RAW_FILTER_LINE(LOG_LEVEL_EMERGENCY, svc, content)
         #else
-            #define LOG_EMERGENCY(svc, content) LOG_RAW_LINE(svc, content)
+            #define LOG_EMERGENCY(svc, content) LOG_RAW_LINE(LOG_LEVEL_EMERGENCY, svc, content)
         #endif
     #else
-        #define LOG_EMERGENCY(svc, content) LOG_RAW_DO_NOTHING(svc, content)
+        #define LOG_EMERGENCY(svc, content) LOG_RAW_DO_NOTHING(LOG_LEVEL_EMERGENCY, svc, content)
     #endif
 
 #endif // ifndef _EASYLOGGGER_h
