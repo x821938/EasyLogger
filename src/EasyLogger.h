@@ -12,6 +12,11 @@
     }
     #define endl "\r\n"
 
+    // Default to log to "Serial". But it can be defined in code to log to Serial2 for example.
+    #ifndef LOG_OUTPUT
+        #define LOG_OUTPUT Serial
+    #endif
+
     // LOG levels order/priority. IF LOG_LEVEL_NONE is set, then nothing will be logged
     #define LOG_LEVEL_NONE -1
     #define LOG_LEVEL_EMERGENCY 0
@@ -58,14 +63,14 @@
                 hours = minutes / 60;
                 days = hours / 24;
                 sprintf(logFormattedTime, "%03u:%02u:%02u:%02u:%03u", days, hours % 24, minutes % 60, seconds % 60, logTime % 1000);
-                Serial << logFormattedTime << "  ";
+                LOG_OUTPUT << logFormattedTime << "  ";
             #elif LOG_FORMATTING == LOG_FORMATTING_MILLIS
                 sprintf(logFormattedTime, "%09u", logTime);
-                Serial << logFormattedTime << "  ";
+                LOG_OUTPUT << logFormattedTime << "  ";
             #elif LOG_FORMATTING == LOG_FORMATTING_NOTIME
                 // Dont print anything
             #endif
-            Serial << loglevels_text[loglevel] << " [" << svc << "] : ";
+            LOG_OUTPUT << loglevels_text[loglevel] << " [" << svc << "] : ";
         }
 
         #ifdef LOG_FILTER
@@ -99,8 +104,8 @@
         if (should_log_line(svc))                           \
         {                                                   \
             print_log_line_header(loglevel, svc);           \
-            Serial << content;                              \
-            Serial << endl;                                 \
+            LOG_OUTPUT << content;                          \
+            LOG_OUTPUT << endl;                             \
         }                                                   \
     }
 
@@ -109,8 +114,8 @@
     #define LOG_RAW_LINE(loglevel, svc, content)            \
     {                                                       \
         print_log_line_header(loglevel, svc);               \
-        Serial << content;                                  \
-        Serial << endl;                                     \
+        LOG_OUTPUT << content;                              \
+        LOG_OUTPUT << endl;                                 \
     }
 
     /* If the log statement function shouldn't be compiled in, because our loglevel is too low .

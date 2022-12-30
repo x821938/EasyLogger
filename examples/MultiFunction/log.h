@@ -23,4 +23,8 @@
 
 #define LOG_FORMATTING LOG_FORMATTING_HMS
 
+/* If you want to direct output to a port other than Serial or softserial (eg Serial2) you can define LOG_OUTPUT
+   If nothing is defined log will output to Serial */
+#define LOG_OUTPUT Serial
+
 #include <EasyLogger.h>
