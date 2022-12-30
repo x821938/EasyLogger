@@ -104,5 +104,13 @@ EMERGENCY [setup] : Just a fake emergency
 ```
 If you dont define LOG_FORMATTING it will default to LOG_FORMATTING_HMS (The first line above)
 
+## Output destination
+If you don´t want to output to standard Serial device you can change this:
+```
+#define LOG_OUTPUT Serial2
+```
+Your can use another hardware serial like Serial2 on ESP32 or maybe a softserial.
+If you don´t define this, the standard output will be "Serial".
+
 ## Examples
 See the included examples in /examples folder for usage.
