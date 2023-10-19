@@ -2,6 +2,16 @@
 #define _EASYLOGGGER_h
     #include <Arduino.h>
 
+    #ifdef ARDUINO_PORTENTA_H7_M7
+        #include <mbed.h>
+        static rtos::Mutex log_serial_mutex;
+        #define LOG_MUTEX_LOCK log_serial_mutex.lock();
+        #define LOG_MUTEX_UNLOCK log_serial_mutex.unlock();
+    #else
+        #define LOG_MUTEX_LOCK
+        #define LOG_MUTEX_UNLOCK
+    #endif
+
     // Streaming operator for serial print use to make nice logging like
     // LOG_DEBUG("TST", "var1" << var1 << ", var2=" << var2)
     template <class T>
@@ -101,21 +111,25 @@
        It will log time-stamp and log-content with an endline */
     #define LOG_RAW_FILTER_LINE(loglevel, svc, content)     \
     {                                                       \
+        LOG_MUTEX_LOCK;                                     \
         if (should_log_line(svc))                           \
         {                                                   \
             print_log_line_header(loglevel, svc);           \
             LOG_OUTPUT << content;                          \
             LOG_OUTPUT << endl;                             \
         }                                                   \
+        LOG_MUTEX_UNLOCK;                                   \
     }
 
     /* Reusable code for each loglevel macro funcion. This code is inserted in the log-statement
        if filtering is disabled. Just prints a time-stamp and the log content with an endline */
     #define LOG_RAW_LINE(loglevel, svc, content)            \
     {                                                       \
+        LOG_MUTEX_LOCK;                                     \
         print_log_line_header(loglevel, svc);               \
         LOG_OUTPUT << content;                              \
         LOG_OUTPUT << endl;                                 \
+        LOG_MUTEX_UNLOCK;                                   \
     }
 
     /* If the log statement function shouldn't be compiled in, because our loglevel is too low .
